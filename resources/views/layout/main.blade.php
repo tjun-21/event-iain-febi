@@ -212,8 +212,14 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('submitting.index') }}">
-                                <i class="fas fa-upload"></i>
-                                Submitting
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Event
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="{{ route('submissions.index') }}">
+                                <i class="fas fa-list-alt"></i>
+                                Submissions
                             </a>
                         </li>
                         <li class="nav-item">

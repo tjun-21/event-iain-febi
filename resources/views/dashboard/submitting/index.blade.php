@@ -61,7 +61,7 @@
                         <i class="fas fa-users"></i> Submit File
                     </a>
                     @else
-                    <a href="#" class="m-3btn {{ $btnClass }} btn-sm mt-2 disabled" tabindex="-1" aria-disabled="true" style="pointer-events: none;">
+                    <a href="#" class="m-3 btn {{ $btnClass }} btn-sm mt-2 disabled" tabindex="-1" aria-disabled="true" style="pointer-events: none;">
                         <i class="fas fa-users"></i> Submit File
                     </a>
                     @endif

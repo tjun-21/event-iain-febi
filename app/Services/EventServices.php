@@ -71,7 +71,8 @@ class EventServices
         )
             ->join('event', 'event_peserta.id_event', '=', 'event.id')
             ->leftJoin('kategori_event', 'event.id_kategori_event', '=', 'kategori_event.id')
-            ->leftJoin('range_event', 'event.id_range_event', '=', 'range_event.id');
+            ->leftJoin('range_event', 'event.id_range_event', '=', 'range_event.id')
+            ->where('event_peserta.id_peserta', $params['user_id']);
 
         // dd($query->get());
         // If params is a string, treat it as ID

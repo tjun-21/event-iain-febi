@@ -10,16 +10,16 @@ use App\Models\Requirement;
 
 // load service 
 use App\Services\EventServices;
-// use App\Services\submittingServices;
+use App\Services\SubmissionsServices;
 
-class SubmittingController extends Controller
+class ListSubmittingController extends Controller
 {
-    // public $submittingService;
+    public $submissionsService;
     public $eventService;
 
     public function __construct()
     {
-        // $this->submittingService = new submittingServices;
+        $this->submissionsService = new SubmissionsServices;
         $this->eventService = new EventServices;
     }
 
@@ -29,32 +29,29 @@ class SubmittingController extends Controller
 
     public function index()
     {
-        $user = user_id();
-        // dd($user);
-        $events = $this->eventService->getDataEventByUser([
-            'user_id' => $user
-        ]);
 
+        $events = $this->eventService->getData();
         $data = [
-            'title' => 'Submitting | List Events',
+            'title' => 'Submissions | List Events',
             'events' => $events,
         ];
 
-        return view('dashboard.submitting.index', $data);
+        return view('dashboard.submissions.index', $data);
     }
 
-    public function upload(Event $event)
+    public function list($slug)
     {
-        // dd('test');
-        // Load relationships
-        $event->load(['kategori', 'requirements']);
+        // dd($slug);
+        $listPeserta = $this->submissionsService->getData([
+            'slug' => $slug
+        ]);
 
         $data = [
-            'title' => 'Submit File for Event - ' . $event->nama_event,
-            'event' => $event,
+            'title' => 'List Participants: ',
+            'list' => $listPeserta,
         ];
 
-        return view('dashboard.submitting.upload', $data);
+        return view('dashboard.participants.list', $data);
     }
 
     /**

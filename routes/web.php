@@ -11,6 +11,7 @@ use App\Http\Controllers\EventRequirementController;
 use App\Http\Controllers\ListEventController;
 use App\Http\Controllers\ParticipantsController;
 use App\Http\Controllers\SubmittingController;
+use App\Http\Controllers\ListSubmittingController;
 use App\Http\Controllers\UploadController;
 
 /*
@@ -112,6 +113,18 @@ Route::middleware(['auth.check'])->group(function () {
 
         // Custom route for upload by event slug
         // Route::get('/upload/{event}', [SubmittingController::class, 'upload'])->name('upload');
+    });
+
+    // list submitting routes
+    Route::prefix('submissions')->name('submissions.')->group(function () {
+        Route::get('/', [ListSubmittingController::class, 'index'])->name('index');
+        Route::get('/create/{submissions}', [ListSubmittingController::class, 'create'])->name('create');
+        Route::post('/', [ListSubmittingController::class, 'store'])->name('store');
+        Route::get('/{submissions}', [ListSubmittingController::class, 'list'])->name('list');
+        Route::get('/{event}/{participant}', [ParticipantsController::class, 'show'])->name('show');
+        Route::get('/{submissions}/edit', [ListSubmittingController::class, 'edit'])->name('edit');
+        Route::put('/{submissions}', [ListSubmittingController::class, 'update'])->name('update');
+        Route::delete('/{submissions}', [ListSubmittingController::class, 'destroy'])->name('destroy');
     });
 
 
