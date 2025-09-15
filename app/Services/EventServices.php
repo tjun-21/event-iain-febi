@@ -26,7 +26,12 @@ class EventServices
     public function getData($params = [])
     {
         // dd($params);
-        $query = $this->event->select('event.*', 'kategori_event.nama_kategori', 'range_event.nama_range', 'users.name as user')
+        $query = $this->event->select(
+            'event.*',
+            'kategori_event.nama_kategori',
+            'range_event.nama_range',
+            'users.name as user',
+        )
             ->leftJoin('kategori_event', 'event.id_kategori_event', '=', 'kategori_event.id')
             ->leftJoin('range_event', 'event.id_range_event', '=', 'range_event.id')
             ->leftJoin('users', 'event.id_created_by', '=', 'users.id');
@@ -57,6 +62,32 @@ class EventServices
         return $query->orderBy('event.id', 'desc')->get();
     }
 
+    public function getDataUserByEventPeserta($params = [])
+    {
+        // dd($params);
+        $query = $this->eventPeserta->select(
+            'event.*',
+            'event_peserta.id as id_event_peserta',
+            'event_peserta.id_peserta',
+            'event_peserta.status',
+            'event_peserta.tanggal_daftar',
+            'event_peserta.tanggal_konfirmasi',
+            'kategori_event.nama_kategori',
+            'range_event.nama_range',
+        )
+            ->join('event', 'event_peserta.id_event', '=', 'event.id')
+            ->leftJoin('kategori_event', 'event.id_kategori_event', '=', 'kategori_event.id')
+            ->leftJoin('range_event', 'event.id_range_event', '=', 'range_event.id');
+
+        if (isset($params['slug']) && !empty($params['slug'])) {
+            $query->where('event.slug', $params['slug']);
+        }
+        if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $query->where('event_peserta.id_peserta', $params['user_id']);
+        }
+
+        return $query->first();
+    }
     public function getDataEventByUser($params = [])
     {
         // dd($params);
@@ -77,6 +108,16 @@ class EventServices
         // dd($query->get());
         // If params is a string, treat it as ID
         return $query->orderBy('event.id', 'desc')->get();
+    }
+
+    public function getKategoris()
+    {
+        return $this->kategoriEvent->where('is_active', true)->orderBy('nama_kategori')->get();
+    }
+
+    public function getLingkups()
+    {
+        return $this->rangeEvent->where('is_active', true)->orderBy('nama_range')->get();
     }
 
     public function getStatistics()

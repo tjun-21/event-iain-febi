@@ -12,18 +12,16 @@ return new class extends Migration
             $table->id();
             $table->string('original_name'); // nama file asli
             $table->string('file_path'); // path file
-            $table->unsignedBigInteger('id_peserta');
-            $table->unsignedBigInteger('id_event');
+            $table->unsignedBigInteger('id_event_peserta');
             $table->string('file_category')->default('submission'); // kategori file
             $table->text('description')->nullable(); // deskripsi file
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // status validasi
             $table->timestamps();
 
-            $table->foreign('id_peserta')->references('id')->on('peserta')->onDelete('cascade');
-            $table->foreign('id_event')->references('id')->on('event')->onDelete('cascade');
+            $table->foreign('id_event_peserta')->references('id')->on('event_peserta')->onUpdate('cascade')->onDelete('cascade');
 
             // Index untuk performance
-            $table->index(['id_event', 'file_category', 'status']);
+            $table->index(['id_event_peserta', 'status']);
         });
     }
 

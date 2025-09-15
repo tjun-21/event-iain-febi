@@ -29,6 +29,9 @@ class SubmissionsServices
             'file.id as id_file',
             'file.original_name',
             'file.status as file_status',
+            'file.created_at as file_uploaded_at',
+            'file.file_path',
+            'file.original_name',
             'event.id as id_event',
             'event.nama_event',
             'event.slug',
@@ -41,8 +44,8 @@ class SubmissionsServices
             'peserta.id as id_peserta',
             'peserta.nama as nama_peserta',
         )
-            ->leftJoin('file', 'peserta.id', '=', 'file.id_peserta')
             ->join('event_peserta', 'peserta.id', '=', 'event_peserta.id_peserta')
+            ->leftJoin('file', 'event_peserta.id', '=', 'file.id_event_peserta')
             ->leftJoin('event', 'event_peserta.id_event', '=', 'event.id')
             ->leftJoin('kategori_event', 'event.id_kategori_event', '=', 'kategori_event.id')
             ->leftJoin('range_event', 'event.id_range_event', '=', 'range_event.id');
@@ -53,7 +56,7 @@ class SubmissionsServices
         }
 
         // If params is a string, treat it as ID
-        dd($query->get());
+        // dd($query->get());
 
 
         return $query->orderBy('event.id', 'desc')->get();

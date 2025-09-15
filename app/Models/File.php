@@ -14,8 +14,7 @@ class File extends Model
     protected $fillable = [
         'original_name',
         'file_path',
-        'id_peserta',
-        'id_event',
+        'id_event_peserta',
         'file_category',
         'description',
         'status'

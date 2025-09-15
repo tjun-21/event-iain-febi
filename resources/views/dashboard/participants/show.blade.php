@@ -215,6 +215,7 @@
                                     <label for="status" class="form-label">Ubah Status Registrasi:</label>
                                     <div class="status-options">
                                         <div class="status-option">
+                                            <input type="hidden" name="id_event_peserta" value="{{ $peserta['id_event_peserta'] }}">
                                             <input type="radio" id="registered" name="status" value="registered" {{ $peserta['status'] == 'registered' ? 'checked' : '' }}>
                                             <label for="registered" class="status-option-label status-registered">
                                                 <i class="fas fa-check-circle me-2"></i>

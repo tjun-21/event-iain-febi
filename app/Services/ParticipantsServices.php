@@ -18,6 +18,7 @@ class ParticipantsServices
 
     public function getData($params = [])
     {
+        // dd($params);
         $query = $this->eventPeserta
             ->join('event', 'event_peserta.id_event', '=', 'event.id')
             ->join('peserta', 'peserta.id', '=', 'event_peserta.id_peserta')
@@ -43,9 +44,9 @@ class ParticipantsServices
         }
 
         // Jika ada parameter slug, filter event
-        // if (!empty($params) && is_array($params) && isset($params['slug'])) {
-        //     $query->where('event.slug', $params['slug']);
-        // }
+        if (!empty($params) && is_array($params) && isset($params['slug'])) {
+            $query->where('event.slug', $params['slug']);
+        }
 
         return $query->orderBy('event_peserta.id', 'desc')->get();
     }
@@ -64,17 +65,25 @@ class ParticipantsServices
                 'event_peserta.id_peserta as id',
                 'event_peserta.id_event',
                 'peserta.*',
+                'event_peserta.id as id_event_peserta',
                 'event_peserta.status',
                 'event_peserta.tanggal_daftar as tanggal_pendaftaran',
                 'event_peserta.tanggal_konfirmasi',
             );
-
+        // dd($query->get());
         // Jika ada parameter id, return data dengan id tersebut
-        if (!empty($params) && is_array($params) && isset($params['id'])) {
-            return $query->where('event_peserta.id_peserta', $params['id'])->first();
-        }
+        // if (!empty($params) && is_array($params) && isset($params['id'])) {
+        //     return $query->where('event_peserta.id_peserta', $params['id'])->first();
+        // }
 
-        return $query->orderBy('event_peserta.id', 'desc')->get();
+        if (isset($params['slug']) && !empty($params['slug'])) {
+            $query->where('event.slug', $params['slug']);
+        }
+        if (isset($params['id']) && !empty($params['id'])) {
+            $query->where('event_peserta.id_peserta', $params['id']);
+        }
+        // dd($query->get());
+        return $query->first();
     }
 
 

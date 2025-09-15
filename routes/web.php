@@ -129,8 +129,8 @@ Route::middleware(['auth.check'])->group(function () {
 
 
     // Upload Routes
-    // Route::post('/upload/image', [UploadController::class, 'uploadImage'])->name('upload.image');
-    // Route::delete('/upload/image', [UploadController::class, 'deleteImage'])->name('upload.delete');
+    Route::post('/upload/image', [UploadController::class, 'uploadImage'])->name('upload.image');
+    Route::delete('/upload/image', [UploadController::class, 'deleteImage'])->name('upload.delete');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

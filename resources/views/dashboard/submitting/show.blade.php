@@ -37,7 +37,7 @@
                                     </span>
                                 </div>
                                 <div class="status-badges mt-3">
-                                    <span class="status-badge {{ $event->status == 'published' ? 'status-approved' : ($event->status == 'draft' ? 'status-registered' : 'status-cancelled') }}">
+                                    <span class="status-badge {{ $event->status == 'confirmed' ? 'status-approved' : ($event->status == 'registered' ? 'status-registered' : 'status-cancelled') }}">
                                         <i class="fas fa-info-circle me-1"></i>
                                         {{ ucfirst($event->status) }}
                                     </span>
@@ -82,7 +82,7 @@
                 <div class="card-body">
                     <form action="{{ route('submitting.store') }}" method="POST" enctype="multipart/form-data" class="modern-upload-form">
                         @csrf
-                        <input type="hidden" name="event_id" value="{{ $event->id }}">
+                        <input type="hidden" name="id_event_peserta" value="{{ $event->id_event_peserta }}">
                         <div class="alert bg-warning mb-3" style="font-size:0.97rem;">
                             <i class="fas fa-exclamation-triangle me-1"></i>
                             <strong>Perhatian:</strong> Anda hanya dapat melakukan submitting file satu kali untuk event ini. Pastikan file yang diupload sudah benar.

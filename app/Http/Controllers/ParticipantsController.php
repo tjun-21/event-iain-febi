@@ -55,6 +55,7 @@ class ParticipantsController extends Controller
             'slug' => $slug
         ]);
 
+        // dd($listPeserta);
         $data = [
             'title' => 'List Participants: ',
             'list' => $listPeserta,
@@ -71,7 +72,8 @@ class ParticipantsController extends Controller
         // dd($eventData);
         // Ambil data peserta yang ikut event tersebut
         $peserta = $this->participantsService->getDetailParticipant([
-            'id' => $participant
+            'id' => $participant,
+            'slug' => $event
         ]);
         // dd($peserta);
         // $peserta = Peserta::findOrFail($participant);
@@ -94,12 +96,14 @@ class ParticipantsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // dd($request->all());
         try {
             $request->validate([
+                'id_event_peserta' => 'required|exists:event_peserta,id',
                 'status' => 'required|in:registered,confirmed,cancelled',
             ]);
             // Update status pada tabel event_peserta
-            $eventPeserta = \App\Models\EventPeserta::where('id_peserta', $id)->firstOrFail();
+            $eventPeserta = \App\Models\EventPeserta::findOrFail($request->id_event_peserta);
             $eventPeserta->status = $request->status;
             $eventPeserta->tanggal_konfirmasi = now();
             $eventPeserta->save();

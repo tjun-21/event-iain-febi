@@ -63,21 +63,22 @@ class SubmittingController extends Controller
     public function create($slug)
     {
         // dd($slug);
-        $event = $this->eventService->getData([
-            'slug' => $slug
+        // dd(user_id());
+        $event = $this->eventService->getDataUserByEventPeserta([
+            'slug' => $slug,
+            'user_id' => user_id()
         ]);
-
+        // dd($event);
         // Cek apakah user sudah submit file untuk event ini
         $submittedFile = null;
         $alreadySubmitted = false;
         if ($event && user_id()) {
-            $submittedFile = \App\Models\File::where('id_event', $event->id)
-                ->where('id_peserta', user_id())
+            $submittedFile = \App\Models\File::where('id_event_peserta', $event->id_event_peserta)
                 ->latest('created_at')
                 ->first();
             $alreadySubmitted = $submittedFile ? true : false;
         }
-
+        // dd($submittedFile);
         $data = [
             'title' => 'Submitting File: ',
             'event' => $event,
@@ -99,7 +100,7 @@ class SubmittingController extends Controller
         try {
             // Validasi input file dokumen
             $validated = $request->validate([
-                'event_id' => 'required|exists:event,id',
+                'id_event_peserta' => 'required|exists:event_peserta,id',
                 'file' => 'required|file|mimes:pdf,jpg,jpeg,png,docx,zip|max:10240', // 10MB = 10240KB
             ]);
             // Handle file upload
@@ -112,14 +113,14 @@ class SubmittingController extends Controller
 
             // Simpan data ke model File
             \App\Models\File::create([
-                'id_event' => $validated['event_id'],
-                'id_peserta' => user_id(),
+                'id_event_peserta' => $validated['id_event_peserta'],
                 'file_path' => $validated['file_path'],
                 'original_name' => $file->getClientOriginalName(),
             ]);
 
-            // Ambil slug event dari database
-            $event = \App\Models\Event::find($validated['event_id']);
+            // Ambil slug event dari event_peserta
+            $eventPeserta = \App\Models\EventPeserta::find($validated['id_event_peserta']);
+            $event = $eventPeserta ? \App\Models\Event::find($eventPeserta->id_event) : null;
             $slug = $event ? $event->slug : null;
             if ($slug) {
                 return redirect()->route('submitting.create', $slug)

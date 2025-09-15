@@ -41,17 +41,23 @@ class ListSubmittingController extends Controller
 
     public function list($slug)
     {
-        // dd($slug);
-        $listPeserta = $this->submissionsService->getData([
+
+        $listSubmissions = $this->submissionsService->getData([
             'slug' => $slug
         ]);
 
+        $event = $this->eventService->getData([
+            'slug' => $slug
+        ]);
+        // dd($event);
+
         $data = [
-            'title' => 'List Participants: ',
-            'list' => $listPeserta,
+            'title' => 'List Submission: ',
+            'list' => $listSubmissions,
+            'event' => $event,
         ];
 
-        return view('dashboard.participants.list', $data);
+        return view('dashboard.submissions.list', $data);
     }
 
     /**
